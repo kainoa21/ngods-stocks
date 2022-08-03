@@ -105,6 +105,12 @@ services:
   trino:
     build: trino/
     container_name: trino
+    environment:
+      - AWS_ACCESS_KEY_ID=NONE
+      - AWS_SECRET_ACCESS_KEY=NONE
+      - AWS_REGION=us-east-1
+      - AWS_DEFAULT_REGION=us-east-1
+      - TABULAR_TOKEN=${TABULAR_TOKEN}
     volumes:
       - ./data/stage:/var/lib/ngods/stage
     ports:

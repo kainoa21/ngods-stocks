@@ -13,11 +13,11 @@ RUN mkdir -p ${TRINO_HOME} ${TRINO_DATA_DIR} ${DATA_STAGE_DIR} ${INSTALL_DIR}
 # install core packages 
 RUN apt-get update && apt-get upgrade -y && \
     apt-get install -y --no-install-recommends \
-      sudo \
-      curl \
-      unzip \
-      make \
-      openjdk-17-jdk \
+    sudo \
+    curl \
+    unzip \
+    make \
+    openjdk-17-jdk \
     && rm -rf /var/lib/apt/lists/*
 
 WORKDIR ${INSTALL_DIR}
@@ -27,9 +27,15 @@ COPY conf/requirements.txt .
 RUN pip3 install --no-cache-dir -r requirements.txt \
     && rm requirements.txt
 
-RUN curl https://repo1.maven.org/maven2/io/trino/trino-server/390/trino-server-390.tar.gz -Lo trino-server-390.tar.gz \
-    && tar xvzf trino-server-390.tar.gz --directory ${TRINO_HOME} --strip-components 1 \
-    && rm trino-server-390.tar.gz 
+RUN curl https://repo1.maven.org/maven2/io/trino/trino-server/388/trino-server-388.tar.gz -Lo trino-server-388.tar.gz \
+    && tar xvzf trino-server-388.tar.gz --directory ${TRINO_HOME} --strip-components 1 \
+    && rm trino-server-388.tar.gz 
+
+# Trino Iceberg Plugin (with Iceberg REST support)
+RUN rm -rf ${TRINO_HOME}/plugin/iceberg
+RUN curl https://tabular-repository-public.s3.amazonaws.com/trino/trino-iceberg-388.zip -Lo trino-iceberg-388.zip \
+    && unzip -j -o trino-iceberg-388.zip -d ${TRINO_HOME}/plugin/iceberg \
+    && rm trino-iceberg-388.zip
 
 WORKDIR ${TRINO_HOME}
 

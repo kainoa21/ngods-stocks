@@ -1,3 +1,14 @@
+{% set create_view_stocks %}
+CREATE TEMPORARY VIEW stocks
+USING csv 
+OPTIONS (
+  path '/var/lib/ngods/stage/stocks.csv',
+  header false
+);
+{% endset %}
+
+{% do run_query(create_view_stocks) %}
+
 select  
 		cast(trim(_c0) as date) as dt,
 		trim(_c1) as symbol,
@@ -8,4 +19,4 @@ select
 		cast(trim(_c6) as long) as volume,
 		cast(trim(_c7) as numeric(32,16)) as dividends,
 		cast(trim(_c8) as numeric(32,16)) as splits						
-	from csv.`/var/lib/ngods/stage/stocks.csv`
+	from stocks
